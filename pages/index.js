@@ -20,7 +20,7 @@ export default function Home() {
   // for next auth
   const [session, loading] = useSession()
   const [docs, setDocs] = useState([])
-
+  // console.log(session);
   // if user is not login
   // if (!session) return <Login />
 
@@ -40,7 +40,7 @@ export default function Home() {
     // mapping the current user email with document they will have or creating
     db
       .collection('userDocs')
-      .doc(session.user.email)
+      .doc(session?.user?.email)
       .collection('docs')
       .add({
         fileName: input,
@@ -50,10 +50,12 @@ export default function Home() {
     setShowModal(false)
   }
 
+  // fetching the documents filename from db
   useEffect(() => {
     const unsubscribe = db
       .collection('userDocs')
       .doc(session?.user?.email)
+      // .doc(session?.user?.email)
       .collection('docs')
       .orderBy('timestamp', 'desc')
       .onSnapshot((snapshot) => {

@@ -4,6 +4,7 @@ const firebaseConfig = {
     authDomain: "docs-clone-efeaa.firebaseapp.com",
     projectId: "docs-clone-efeaa",
     storageBucket: "docs-clone-efeaa.appspot.com",
+    // databaseURL: "https://docs-clone-efeaa.firebaseio.com",
     messagingSenderId: "713674158809",
     appId: "1:713674158809:web:665b0417c11388cb8004c8",
     measurementId: "G-2LS4N67QQY"

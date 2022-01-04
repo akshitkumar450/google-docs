@@ -21,24 +21,39 @@ function TextEditor() {
     // for storing the text we type
     // using draft js standards
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
+    const [data, setData] = useState('')
 
     const router = useRouter();
     const { docId } = router.query;
-    const [snapshot] = useDocumentOnce(
-        db.collection("userDocs").doc(session.user.email).collection("docs").doc(docId)
-    );
+    // const [snapshot] = useDocumentOnce(
+    //     db.collection("userDocs").doc(session.user.email).collection("docs").doc(docId)
+    // );
+
+    useEffect(() => {
+        db
+            .collection('userDocs')
+            .doc(session.user.email)
+            .collection('docs')
+            .doc(docId)
+            .onSnapshot((snapshot) => {
+                return (
+                    setData(snapshot.data())
+                )
+            })
+    }, [])
+    // console.log(data);
 
     // when page loads we need to get data from firebase db
     useEffect(() => {
-        if (snapshot?.data()?.editorState) {
+        if (data?.editorState) {
             setEditorState(
                 EditorState.createWithContent(
                     // getting the data from firebase which is stored in raw form
-                    convertFromRaw(snapshot?.data()?.editorState)
+                    convertFromRaw(data?.editorState)
                 )
             );
         }
-    }, [snapshot]);
+    }, []);
 
     // this will run when text is written and store it in db
     const onEditorStateChange = (editorState) => {

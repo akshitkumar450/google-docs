@@ -13,30 +13,37 @@ function DocId() {
     const router = useRouter()
     const [session] = useSession()
     if (!session) return <Login />
-    // const [id, setId] = useState('')
+    const [data, setData] = useState('')
     // getting user id from url
     const { docId } = router.query
-    const [snapshot, loading] = useDocumentDataOnce(
+    // const [snapshot, loading] = useDocumentDataOnce(
+    //     db
+    //         .collection('userDocs')
+    //         .doc(session.user.email)
+    //         .collection('docs')
+    //         .doc(docId)
+    // )
+    // redirects the user if they dont have access to it
+    // if (!loading && !snapshot?.fileName) {
+    //     router.replace('/')
+    // }
+    // console.log(snapshot);
+    // console.log(id);
+
+    // getting a particular id's data
+    useEffect(() => {
         db
             .collection('userDocs')
             .doc(session.user.email)
             .collection('docs')
             .doc(docId)
-    )
-    // redirects the user if they dont have access to it
-    if (!loading && !snapshot?.fileName) {
-        router.replace('/')
-    }
-    // console.log(snapshot);
-    // console.log(id);
-    // useEffect(() => {
-    //     db
-    //         .collection('userDocs')
-    //         .doc(session.user.email)
-    //         .collection('docs')
-    //         .doc(setId(docId))
-    // }, [])
-    // console.log(id);
+            .onSnapshot((snapshot) => {
+                return (
+                    setData(snapshot.data())
+                )
+            })
+    }, [])
+    // console.log(data);
     return (
         <div>
             <header className='flex justify-between items-center p-3 pb-1'>
@@ -44,7 +51,7 @@ function DocId() {
                     <Icon name='description' size='5xl' color='blue' />
                 </span>
                 <div className='flex-1 px-2'>
-                    <h2>{snapshot?.fileName}</h2>
+                    <h2>{data.fileName}</h2>
                     <div className='flex items-center text-sm space-x-3 -ml-1 h-8 text-gray-600'>
                         <p className='option'>File</p>
                         <p className='option'>Edit</p>
